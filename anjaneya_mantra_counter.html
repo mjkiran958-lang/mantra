@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sri Karyasiddhi Anjaneya — Mantra Japa</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #FDF6E3;
+      min-height: 100vh;
+      padding-bottom: 2rem;
+    }
+
+    .header {
+      background: #7B1F00;
+      text-align: center;
+      padding: 1.4rem 1rem 1.1rem;
+    }
+    .header-om { font-size: 28px; color: #F5C842; margin-bottom: 4px; }
+    .header-title { font-size: 20px; font-weight: 600; color: #FDF6E3; letter-spacing: 0.06em; }
+    .header-sub { font-size: 11px; color: #E8A060; margin-top: 4px; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    .border-strip {
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        #C97C2A 0px, #C97C2A 8px,
+        #F5C842 8px, #F5C842 16px,
+        #C97C2A 16px, #C97C2A 24px,
+        #E8A060 24px, #E8A060 32px
+      );
+    }
+
+    .deco {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 0.8rem 1.5rem;
+    }
+    .deco-line { height: 1px; flex: 1; background: #E0C080; }
+    .deco-d { width: 5px; height: 5px; border-radius: 50%; background: #C97C2A; display: inline-block; }
+    .deco-d.big { width: 9px; height: 9px; background: #F5C842; border: 1.5px solid #C97C2A; }
+
+    .mantra-card {
+      margin: 0 1rem;
+      background: #FFFDF5;
+      border: 1px solid #E8C97A;
+      border-radius: 14px;
+      padding: 1.25rem 1.25rem 1rem;
+      position: relative;
+    }
+    .mantra-card::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border: 0.5px dashed #F0D890;
+      border-radius: 10px;
+      pointer-events: none;
+    }
+    .mantra-badge {
+      text-align: center; font-size: 10px; color: #9A6020;
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+    .mantra-kannada {
+      font-size: 18px; color: #4A1A00; line-height: 2;
+      text-align: center; margin-bottom: 0.75rem; font-weight: 600;
+    }
+    .mantra-divider {
+      display: flex; align-items: center; gap: 8px; margin: 0.5rem 0;
+    }
+    .mantra-divider span { flex: 1; height: 0.5px; background: #E8C97A; }
+    .mantra-divider-dot { font-size: 14px; color: #C97C2A; }
+    .mantra-english {
+      font-size: 14px; color: #7A4A10; line-height: 2.1;
+      text-align: center; font-style: italic; letter-spacing: 0.03em;
+    }
+
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; padding: 1rem 1rem 0;
+    }
+    .stat-card {
+      background: #FFFDF5; border: 0.5px solid #E8C97A;
+      border-radius: 12px; padding: 10px 6px; text-align: center;
+    }
+    .stat-label { font-size: 10px; color: #9A6020; letter-spacing: 0.08em; text-transform: uppercase; }
+    .stat-val { font-size: 24px; font-weight: 600; color: #7B1F00; margin-top: 3px; }
+
+    .progress-section { padding: 0.85rem 1rem 0; }
+    .progress-bar-wrap {
+      background: #F0E0B0; border-radius: 20px; height: 10px;
+      overflow: hidden; border: 0.5px solid #D4A855;
+    }
+    .progress-bar-fill {
+      height: 100%; background: #7B1F00;
+      border-radius: 20px; transition: width 0.3s ease; width: 0%;
+    }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 10px; color: #9A6020; margin-top: 4px;
+    }
+
+    .btn-section {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1.25rem 1rem 0; gap: 14px;
+    }
+    .tap-label { font-size: 12px; color: #9A6020; letter-spacing: 0.05em; }
+
+    .tap-btn {
+      width: 170px; height: 170px; border-radius: 50%;
+      background: #7B1F00; border: 3px solid #C97C2A;
+      outline: 5px solid #F0D0A0;
+      cursor: pointer; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: transform 0.1s, outline-color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tap-btn:active { transform: scale(0.92); outline-color: #E8A060; }
+    .tap-btn.complete { background: #2A6B1A; border-color: #4A9A20; outline-color: #C0DD97; }
+
+    .tap-btn-num { font-size: 62px; font-weight: 600; color: #FDF6E3; line-height: 1; }
+    .tap-btn-hint { font-size: 11px; color: #E8C090; margin-top: 3px; letter-spacing: 0.05em; }
+    .tap-btn.complete .tap-btn-num { color: #C0EE80; }
+    .tap-btn.complete .tap-btn-hint { color: #80C040; }
+
+    .done-banner {
+      background: #EAF3DE; border: 0.5px solid #639922; border-radius: 10px;
+      padding: 12px 20px; text-align: center; font-size: 14px; font-weight: 600;
+      color: #27500A; display: none; width: 100%;
+    }
+    .done-banner.show { display: block; }
+
+    .reset-btn {
+      font-size: 13px; color: #9A6020; background: #FFFDF5;
+      border: 0.5px solid #D4A855; border-radius: 8px;
+      padding: 8px 24px; cursor: pointer;
+    }
+    .reset-btn:hover { background: #FFF0D0; }
+    .reset-btn:active { transform: scale(0.97); }
+
+    .dots-section { padding: 1rem 1rem 0; }
+    .dots-label { font-size: 10px; color: #9A6020; margin-bottom: 8px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .dots-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+
+    .dot {
+      width: 13px; height: 13px; border-radius: 50%;
+      background: #F0E0B0; border: 0.5px solid #D4A855;
+      transition: background 0.15s; flex-shrink: 0;
+    }
+    .dot.filled { background: #7B1F00; border-color: #9A3A10; }
+    .dot.milestone { border: 1.5px solid #C97C2A; }
+    .dot.milestone.filled { background: #C97C2A; border-color: #F5C842; }
+
+    .legend { display: flex; gap: 14px; margin-top: 8px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #9A6020; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-dot.r { background: #7B1F00; border: 0.5px solid #9A3A10; }
+    .legend-dot.g { background: #C97C2A; border: 1.5px solid #F5C842; }
+
+    .footer-deco { display: flex; align-items: center; gap: 6px; padding: 1.25rem 1rem 0; }
+    .footer-deco span { flex: 1; height: 1px; background: #E0C080; }
+
+    .footer { text-align: center; font-size: 12px; color: #B09050; padding: 0.5rem 1rem 0; letter-spacing: 0.06em; }
+    .footer-ashram { font-size: 10px; color: #C8A060; margin-top: 4px; text-align: center; padding: 0 1rem; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-om">&#x1F548;</div>
+    <div class="header-title">Sri Karyasiddhi Anjaneya</div>
+    <div class="header-sub">Mantra Japa — 108 times</div>
+  </div>
+  <div class="border-strip"></div>
+
+  <div class="deco">
+    <div class="deco-line"></div>
+    <div class="deco-d"></div>
+    <div class="deco-d big"></div>
+    <div class="deco-d"></div>
+    <div class="deco-line"></div>
+  </div>
+
+  <div class="mantra-card">
+    <div class="mantra-badge">Sri Karyasiddhi Anjaneya Mantra</div>
+    <div class="mantra-kannada">
+      ತ್ವಮಸ್ಮಿನ್ ಕಾರ್ಯನಿರ್ಯೋಗೇ<br>
+      ಪ್ರಮಾಣಂ ಹರಿಸತ್ತಮ<br>
+      ಹನುಮನ್! ಯತ್ನಮಾಸ್ಥಾಯ<br>
+      ದುಃಖಕ್ಷಯ ಕರೋ ಭವ
+    </div>
+    <div class="mantra-divider">
+      <span></span>
+      <div class="mantra-divider-dot">&#10050;</div>
+      <span></span>
+    </div>
+    <div class="mantra-english">
+      tvamasmin kāryaniryōgē<br>
+      pramāṇaṁ harisattama<br>
+      hanuman! yatnamāsthāya<br>
+      duḥkhakṣaya karō bhava
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Chanted</div>
+      <div class="stat-val" id="statDone">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Remaining</div>
+      <div class="stat-val" id="statLeft">108</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Progress</div>
+      <div class="stat-val" id="statPct">0%</div>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div style="height:8px"></div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="progress-label">
+      <span>0</span><span>27</span><span>54</span><span>81</span><span>108</span>
+    </div>
+  </div>
+
+  <div class="btn-section">
+    <div class="tap-label">Chant the mantra, then tap</div>
+    <button class="tap-btn" id="mainBtn" onclick="tap()">
+      <span class="tap-btn-num" id="mainNum">0</span>
+      <span class="tap-btn-hint" id="mainHint">tap after chant</span>
+    </button>
+    <div class="done-banner" id="doneBanner">&#x1F649; Jai Hanuman! All 108 chants complete</div>
+    <button class="reset-btn" onclick="reset()">&#8635; Reset</button>
+  </div>
+
+  <div class="dots-section">
+    <div class="dots-label">Progress — gold marks every 27 chants</div>
+    <div class="dots-grid" id="dotsGrid"></div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot r"></div>Regular</div>
+      <div class="legend-item"><div class="legend-dot g"></div>Milestone (27, 54, 81, 108)</div>
+    </div>
+  </div>
+
+  <div class="footer-deco">
+    <span></span>
+    <div class="deco-d"></div>
+    <div class="deco-d big"></div>
+    <div class="deco-d"></div>
+    <span></span>
+  </div>
+  <div class="footer">Jai Sri Hanuman</div>
+  <div class="footer-ashram">Sri Ganapathy Sachchidananda Ashrama, Girinagar, Bengaluru</div>
+
+  <script>
+    const TOTAL = 108;
+    const MILESTONES = new Set([27, 54, 81, 108]);
+    let count = 0;
+
+    const dotsGrid = document.getElementById('dotsGrid');
+    for (let i = 1; i <= TOTAL; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (MILESTONES.has(i) ? ' milestone' : '');
+      d.id = 'd' + i;
+      dotsGrid.appendChild(d);
+    }
+
+    function tap() {
+      if (count >= TOTAL) return;
+      count++;
+      update();
+    }
+
+    function reset() {
+      count = 0;
+      update();
+    }
+
+    function update() {
+      const pct = Math.round((count / TOTAL) * 100);
+      document.getElementById('mainNum').textContent = count;
+      document.getElementById('statDone').textContent = count;
+      document.getElementById('statLeft').textContent = TOTAL - count;
+      document.getElementById('statPct').textContent = pct + '%';
+      document.getElementById('progressBar').style.width = pct + '%';
+
+      const btn = document.getElementById('mainBtn');
+      const hint = document.getElementById('mainHint');
+      const banner = document.getElementById('doneBanner');
+
+      if (count === 0) {
+        hint.textContent = 'tap after chant';
+        btn.className = 'tap-btn';
+        banner.className = 'done-banner';
+      } else if (count < TOTAL) {
+        hint.textContent = (TOTAL - count) + ' remaining';
+        btn.className = 'tap-btn';
+        banner.className = 'done-banner';
+      } else {
+        hint.textContent = 'complete!';
+        btn.className = 'tap-btn complete';
+        banner.className = 'done-banner show';
+      }
+
+      for (let i = 1; i <= TOTAL; i++) {
+        const d = document.getElementById('d' + i);
+        const base = 'dot' + (MILESTONES.has(i) ? ' milestone' : '');
+        d.className = base + (i <= count ? ' filled' : '');
+      }
+    }
+  </script>
+
+</body>
+</html>
